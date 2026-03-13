@@ -83,7 +83,7 @@
 									<div class="card-body">
 										<div class="billing-address-form">
 											<p><input type="text" name="name" placeholder="Full Name" value="{{ old('name', auth()->user()->name ?? '') }}"></p>
-											<p><input type="text" name="phone" placeholder="Phone" value="{{ old('phone') }}"></p>
+											<p><input type="text" name="phone" placeholder="Phone" min="11" max="11" value="{{ old('phone') }}"></p>
 											<p><input type="text" name="address" placeholder="Address" value="{{ old('address') }}"></p>
 											<p><input type="text" name="city" placeholder="City" value="{{ old('city') }}"></p>
 											<p><input type="text" name="governorate" placeholder="Governorate" value="{{ old('governorate') }}"></p>

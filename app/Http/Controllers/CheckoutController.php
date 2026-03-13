@@ -7,7 +7,6 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ShippingSetting;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -34,6 +33,7 @@ class CheckoutController extends Controller
    {
     $user = Auth::user();
     $cartItems = Cart::where('user_id', $user->id)->with('product')->get();
+        $createdOrder = null;
 
     if ($cartItems->isEmpty()) {
         return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
@@ -45,7 +45,7 @@ class CheckoutController extends Controller
     });
     $total = $subtotal + $shipping;
 
-    DB::transaction(function () use($cartItems, $user, $request, $subtotal, $shipping, $total) {
+    DB::transaction(function () use($cartItems, $user, $request, $subtotal, $shipping, $total, &$createdOrder) {
         $order = Order::create([
             'user_id' => $user->id,
             'order_number' => 'ORD-' . strtoupper(uniqid()),
@@ -58,6 +58,7 @@ class CheckoutController extends Controller
             'governorate' => $request->governorate,
             'total_price' => $total
         ]);
+        $createdOrder = $order;
         foreach ($cartItems as $item) {
             OrderItem::create([
                 'order_id' => $order->id,
@@ -70,7 +71,21 @@ class CheckoutController extends Controller
         Cart::where('user_id', $user->id)->delete();
     });
 
-    return redirect()->route('cart.index')->with('success', 'Order placed successfully.');
+    $trackingNumber = $createdOrder?->order_number ?? 'N/A';
+
+    return redirect()
+        ->route('orders.index')
+        ->with('success', 'Order placed successfully. Tracking number: ' . $trackingNumber);
+   }
+
+   public function myOrders()
+   {
+        $orders = Order::where('user_id', Auth::id())
+            ->with(['items.product'])
+            ->latest()
+            ->get();
+
+        return view('orders', compact('orders'));
    }
 
 }

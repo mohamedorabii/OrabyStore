@@ -40,3 +40,7 @@ Route::get('/checkout', [CheckoutController::class, 'index'])
 Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])
     ->middleware(['auth','verified'])
     ->name('checkout.placeOrder');
+
+Route::get('/my-orders', [CheckoutController::class, 'myOrders'])
+    ->middleware(['auth', 'verified'])
+    ->name('orders.index');

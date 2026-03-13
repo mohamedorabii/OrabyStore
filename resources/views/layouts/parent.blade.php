@@ -100,6 +100,9 @@
                                                 </li>
                                             @endif
                                             <li>
+                                                <a href="{{ route('orders.index') }}">My Orders</a>
+                                            </li>
+                                            <li>
                                                 <a href="{{ route('logout') }}"
                                                     onclick="event.preventDefault();
                document.getElementById('logout-form').submit();">
