@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BackEnd\SocialController;
 use App\Http\Controllers\Backend\VerificationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\FrontEnd\BrandController;
@@ -10,6 +11,8 @@ use App\Http\Controllers\FrontEnd\ProductController;
 use App\Http\Controllers\FrontEnd\SubCategoryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Socialite;
+
 
 Auth::routes(['verify' => true]);
 // Email Verification Routes
@@ -17,11 +20,15 @@ Route::middleware(['auth'])->group(function () {
    Route::get('/email/verify',[VerificationController::class,'show'])->name('verification.notice');
    Route::post('/email/verify/resend',[VerificationController::class,'resend'])->name('verification.resend');
 });
-// Route::
+
+
+Route::get('/auth/{provider}/redirect', [SocialController::class, 'redirect']);
+Route::get('/auth/{provider}/callback', [SocialController::class, 'callback']);
 
 
 // Frontend Routes
-Route::get('/', [HomeController::class,'index'])->name('home');
+Route::get('/', [HomeController::class,'LatestProducts'])->name('home');
+Route::get('/home/category/{id?}', [HomeController::class,'showProductsByCategory'])->name('home.category');
 Route::get('/products/{id?}',[ProductController::class,'index'])->name('products');
 Route::get('/brands',[BrandController::class,'index'])->name('brands');
 Route::get('/categories/{id?}',[CategoryController::class,'index'])->name('categories');

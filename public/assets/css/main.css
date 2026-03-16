@@ -2783,3 +2783,95 @@ table.order-details tbody td {
 .remove-btn i {
     margin: 0;
 }
+
+/* ===== Category Filter Buttons ===== */
+.cat-filter-wrap {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.cat-filter-wrap h5 {
+    font-family: 'Poppins', sans-serif;
+    color: #162133;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
+.cat-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.cat-btn {
+    font-family: 'Poppins', sans-serif;
+    border: 2px solid #F28123;
+    background: transparent;
+    color: #F28123;
+    padding: 8px 22px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.cat-btn:hover,
+.cat-btn.active {
+    background: #F28123;
+    color: #fff;
+}
+
+/* ===== Category Cards ===== */
+.category-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.category-card {
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: 0.3s;
+    background: #fff;
+    margin-bottom: 30px;
+}
+
+.category-card:hover {
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transform: translateY(-3px);
+}
+
+.category-card .category-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: 0.3s;
+    display: block;
+}
+
+.category-card:hover .category-img {
+    opacity: 0.9;
+}
+
+.category-card-body {
+    padding: 15px;
+}
+
+.category-card-body h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    color: #162133;
+    margin: 0 0 5px;
+}
+
+.category-card-body span {
+    font-size: 13px;
+    color: #F28123;
+    font-family: 'Poppins', sans-serif;
+}
+
+

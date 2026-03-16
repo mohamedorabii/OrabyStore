@@ -64,6 +64,7 @@
                                 <a href="{{ route('login') }}">{{ __('Already have an account? Login') }}</a>
                             </div>
                         @endif
+                        
                     </form>
                 </div>
             </div>

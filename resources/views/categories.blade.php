@@ -32,16 +32,17 @@
             <div class="row">
                 @foreach ($categories as $category)
                     <div class="col-lg-4 col-md-6 text-center">
-                        <div class="single-product-item">
-                            <div class="product-image">
-                                <a href="{{ route('products', $category->id) }}"><img
-                                        src="{{ asset('storage/' . $category->image) }}"class="card-img-top"
-                                        style="max-height:250px !important; min-height:250px !important;">
-
+                        <a href="{{ route('products', $category->id) }}" class="category-card-link">
+                            <div class="category-card">
+                                <img src="{{ asset('storage/' . $category->image) }}"
+                                     alt="{{ $category->name_en }}"
+                                     class="category-img">
+                                <div class="category-card-body">
+                                    <h3>{{ $category->name_en }}</h3>
+                                    <span>Browse Products &rarr;</span>
+                                </div>
                             </div>
-                            <h3>{{ $category->name_en }}</h3>
-                        </div>
-
+                        </a>
                     </div>
                 @endforeach
             </div>

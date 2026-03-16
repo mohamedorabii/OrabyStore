@@ -17,6 +17,12 @@
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-8">
                 <div class="single-product-item p-4">
+                    @if (session('error'))
+                        <div class="alert alert-danger" role="alert">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
@@ -60,6 +66,17 @@
                                 <a href="{{ route('register') }}">{{ __('Create new account') }}</a>
                             @endif
                         </div>
+                       <div class="social-login-buttons">
+    <!-- Google Button -->
+    <a href="{{ url('/auth/google/redirect') }}" class="btn btn-danger w-100 mb-2">
+        <i class="fab fa-google me-2"></i> Login with Google
+    </a>
+
+    <!-- Facebook Button -->
+    <a href="{{ url('/auth/facebook/redirect') }}" class="btn btn-primary w-100 mb-2">
+        <i class="fab fa-facebook-f me-2"></i> Login with Facebook
+    </a>
+</div>
                     </form>
                 </div>
             </div>
