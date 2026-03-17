@@ -18,17 +18,28 @@ class SocialController extends Controller
     {
         try {
             $socialUser = Socialite::driver($provider)->user();
-            $dbUser = User::updateOrCreate(
-                ['provider_id' => $socialUser->getId(), 'provider' => $provider],
-                [
-                    'name' => $socialUser->getName(),
-                    'email' => $socialUser->getEmail(),
-                    'password' => Hash::make('my-' . $provider),
-                ]
-            );
-            Auth::login($dbUser);
-            return redirect()->route('home');
+          // في الـ SocialController - غير الـ updateOrCreate
+$dbUser = User::where('provider', $provider)
+               ->where('provider_id', $socialUser->getId())
+               ->first();
+
+if (!$dbUser) {
+    $dbUser = User::create([
+        'name'        => $socialUser->getName(),
+        'email'       => $socialUser->getEmail(),
+        'password'    => Hash::make('my-' . $provider),
+        'provider'    => $provider,
+        'provider_id' => $socialUser->getId(),
+    ]);
+}
+
+Auth::login($dbUser);
+return redirect()->route('home');
         } catch (\Exception $e) {
+             dd([
+        'message' => $e->getMessage(),
+        'line'    => $e->getLine(),
+    ]); 
             return redirect()->route('login')->with('error', 'Failed to authenticate with ' . ucfirst($provider) . '. Please try again.');
         }
     }
