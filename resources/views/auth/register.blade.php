@@ -66,6 +66,10 @@
                         @endif
                         
                     </form>
+                     <!-- Google Button -->
+                        <a href="{{ url('/auth/google/redirect') }}" class="btn btn-danger w-100 mb-2">
+                            <i class="fab fa-google me-2"></i> Register with Google
+                        </a>
                 </div>
             </div>
         </div>

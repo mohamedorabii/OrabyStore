@@ -1,8 +1,9 @@
 @extends('layouts.parent')
 
-@section('title', 'Login')
 
+@section('title', 'Login')
 @section('content')
+
     <div class="product-section mt-150 mb-150">
         <div class="container">
             <div class="row">
