@@ -22,11 +22,11 @@
                 <h5>Filter by <span class="orange-text">Category</span></h5>
                 <div class="cat-buttons" id="categories">
                     <a href="{{ route('home') }}">
-                        <button class="cat-btn active" data-cat="all">All</button>
+                        <button class="cat-btn @if(!request()->route('id')) active @endif" data-cat="all">All</button>
                     </a>
                     @foreach ($categories as $category)
                         <a href="{{ route('home.category', $category->id) }}">
-                            <button class="cat-btn" data-cat="{{ $category->id }}">{{ $category->name_en }}</button>
+                            <button class="cat-btn @if(request()->route('id') == $category->id) active @endif" data-cat="{{ $category->id }}">{{ $category->name_en }}</button>
                         </a>
                     @endforeach
                 </div>

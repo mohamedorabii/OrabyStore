@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <meta name="description"
         content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
 
@@ -62,12 +63,14 @@
                         <!-- menu start -->
                         <nav class="main-menu">
                             <ul>
-                                <li class="current-list-item">
+                                <li class="@if (request()->routeIs('home')) current-list-item @endif">
                                     <a href="{{ route('home') }}">Home</a>
                                 </li>
 
-                                <li><a href="{{ route('products') }}">Products</a></li>
-                                <li><a href="{{ route('categories') }}">Categories</a></li>
+                                <li class="@if (request()->routeIs('products')) current-list-item @endif"><a
+                                        href="{{ route('products') }}">Products</a></li>
+                                <li class="@if (request()->routeIs('categories')) current-list-item @endif"><a
+                                        href="{{ route('categories') }}">Categories</a></li>
                                 <li><a href="#">Contact</a></li>
 
                                 <li>
@@ -98,7 +101,7 @@
                                             <li>
                                                 <a href="{{ route('logout') }}"
                                                     onclick="event.preventDefault();
-               document.getElementById('logout-form').submit();">
+                               document.getElementById('logout-form').submit();">
                                                     Logout
                                                 </a>
                                             </li>
@@ -109,11 +112,11 @@
                                             @csrf
                                         </form>
                                     </li>
-                                @endguest
+                                  @endguest
 
-                    </div>
-                    </li>
-                    </ul>
+                                </div>
+                              </li>
+                          </ul>
                     </nav>
                     <a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
                     <div class="mobile-menu"></div>
@@ -159,9 +162,9 @@
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-box about-widget">
                         <h2 class="widget-title">About us</h2>
-                        <p>I am Mohamed Alaa Oraby, a web developer 
+                        <p>I am Mohamed Alaa Oraby, a web developer
                             passionate about creating
-                            modern and responsive websites with 
+                            modern and responsive websites with
                             clean design.</p>
                     </div>
                 </div>
@@ -202,62 +205,62 @@
     <!-- end footer -->
 
     <!-- copyright -->
-<div class="copyright">
-    <div class="container">
-        <div class="row">
+    <div class="copyright">
+        <div class="container">
+            <div class="row">
 
-            <div class="col-lg-6 col-md-12">
-                <p>
-                    © 2026 Mohamed Alaa Oraby, All Rights Reserved.
-                </p>
-            </div>
-
-            <div class="col-lg-6 text-right col-md-12">
-                <div class="social-icons">
-                    <ul>
-
-                        <!-- Facebook -->
-                        <li>
-                            <a href="https://www.facebook.com/share/1CfcigUQ94/" target="_blank">
-                                <i class="fab fa-facebook-f"></i>
-                            </a>
-                        </li>
-
-                        <!-- LinkedIn -->
-                        <li>
-                            <a href="https://www.linkedin.com/in/mohamedalaaorabii" target="_blank">
-                                <i class="fab fa-linkedin"></i>
-                            </a>
-                        </li>
-
-                        <!-- GitHub -->
-                        <li>
-                            <a href="https://github.com/mohamedorabiii" target="_blank">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        </li>
-
-                        <!-- WhatsApp -->
-                        <li>
-                            <a href="https://wa.me/201281856592" target="_blank">
-                                <i class="fab fa-whatsapp"></i>
-                            </a>
-                        </li>
-
-                        <!-- Email -->
-                        <li>
-                            <a href="mailto:mosasameh123@gmail.com">
-                                <i class="fas fa-envelope"></i>
-                            </a>
-                        </li>
-
-                    </ul>
+                <div class="col-lg-6 col-md-12">
+                    <p>
+                        © 2026 Mohamed Alaa Oraby, All Rights Reserved.
+                    </p>
                 </div>
-            </div>
 
+                <div class="col-lg-6 text-right col-md-12">
+                    <div class="social-icons">
+                        <ul>
+
+                            <!-- Facebook -->
+                            <li>
+                                <a href="https://www.facebook.com/share/1CfcigUQ94/" target="_blank">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                            </li>
+
+                            <!-- LinkedIn -->
+                            <li>
+                                <a href="https://www.linkedin.com/in/mohamedalaaorabii" target="_blank">
+                                    <i class="fab fa-linkedin"></i>
+                                </a>
+                            </li>
+
+                            <!-- GitHub -->
+                            <li>
+                                <a href="https://github.com/mohamedorabiii" target="_blank">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                            </li>
+
+                            <!-- WhatsApp -->
+                            <li>
+                                <a href="https://wa.me/201281856592" target="_blank">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </li>
+
+                            <!-- Email -->
+                            <li>
+                                <a href="mailto:mosasameh123@gmail.com">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
-</div>
     <!-- end copyright -->
 
     <!-- jquery -->

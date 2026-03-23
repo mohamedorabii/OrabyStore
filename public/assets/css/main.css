@@ -16,6 +16,8 @@ html {
   font-weight: 400;
   line-height: 28px;
   height: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -1381,9 +1383,14 @@ a.mobile-show.search-bar-icon:hover {
   position: relative;
   z-index: 1;
 }
+/* Fix Google OAuth layout issue */
+html {
+  height: auto !important;
+}
 
-html, body {
-  height: 100%;
+body {
+  height: auto !important;
+  min-height: 100vh;
 }
 
 .hero-area:after {
@@ -2724,6 +2731,16 @@ table.order-details tbody td {
   box-shadow: 0 0 20px #e4e4e4;
   padding-bottom: 50px;
   border-radius: 5px;
+  transition: 0.3s;
+}
+
+.single-product-item:hover {
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  transform: translateY(-3px);
+}
+
+.single-product-item:hover .product-image img {
+  opacity: 0.9;
 }
 
 /* -----------------------------------------------------------------------------
