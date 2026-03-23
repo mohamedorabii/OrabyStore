@@ -16,7 +16,15 @@ class CheckoutController extends Controller
     {
          
          $user = Auth::user();
-        $cartItems = Cart::where('user_id', $user->id)->with('product')->get();
+        $cartItems = Cart::where('user_id', $user->id)
+            ->whereHas('product', function ($query) {
+                $query->where('status', 1)
+                    ->whereHas('category', function ($categoryQuery) {
+                        $categoryQuery->where('status', 1);
+                    });
+            })
+            ->with('product')
+            ->get();
       
         if ($cartItems->isEmpty()) {
             return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
@@ -32,7 +40,15 @@ class CheckoutController extends Controller
   public function placeOrder(PlaceOrderRequest $request)
    {
     $user = Auth::user();
-    $cartItems = Cart::where('user_id', $user->id)->with('product')->get();
+    $cartItems = Cart::where('user_id', $user->id)
+        ->whereHas('product', function ($query) {
+            $query->where('status', 1)
+                ->whereHas('category', function ($categoryQuery) {
+                    $categoryQuery->where('status', 1);
+                });
+        })
+        ->with('product')
+        ->get();
         $createdOrder = null;
 
     if ($cartItems->isEmpty()) {

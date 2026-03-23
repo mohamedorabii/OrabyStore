@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddToCartRequest;
 use App\Models\Cart;
+use App\Models\Product;
 use App\Models\ShippingSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,9 +18,17 @@ class CartController extends Controller
     }
     public function index()
     {
-            $shipping = ShippingSetting::first()->price ?? 0;
+        $shipping = ShippingSetting::first()->price ?? 0;
         $identifier = $this->getIdentifier();
-        $cartItems = Cart::where($identifier)->with('product')->get();
+        $cartItems = Cart::where($identifier)
+            ->whereHas('product', function ($query) {
+                $query->where('status', 1)
+                    ->whereHas('category', function ($categoryQuery) {
+                        $categoryQuery->where('status', 1);
+                    });
+            })
+            ->with('product')
+            ->get();
         $total = $cartItems->sum(function ($item) {
             return $item->product->price * $item->quantity;
         });
@@ -27,6 +36,16 @@ class CartController extends Controller
     }
     public function addToCart(AddToCartRequest $request)
     {
+        $product = Product::where('status', 1)
+            ->whereHas('category', function ($query) {
+                $query->where('status', 1);
+            })
+            ->find($request->product_id);
+
+        if (! $product) {
+            return redirect()->back()->with('error', 'This product is not available right now.');
+        }
+
         $identifier = $this->getIdentifier();
         $cartItem = Cart::where($identifier)->where('product_id', $request->product_id)->first();
         if ($cartItem) {
