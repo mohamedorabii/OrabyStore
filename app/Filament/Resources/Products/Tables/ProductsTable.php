@@ -39,8 +39,8 @@ class ProductsTable
                     ->badge()
                     ->color(fn($state) => $state == 1 ? 'success' : 'danger')
                     ->sortable(),
-               TextColumn::make('subcategory.name_en')
-                    ->label('Subcategory'),
+               TextColumn::make('category.name_en')
+                    ->label('Category'),
                 TextColumn::make('brand.name_en')
                     ->label('Brand'),
                 TextColumn::make('created_at')

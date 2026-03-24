@@ -31,7 +31,7 @@ class ProductInfolist
                     ->numeric(),
                 TextEntry::make('status')
                     ->numeric(),
-                TextEntry::make('subcategory_id')
+                TextEntry::make('category_id')
                     ->numeric(),
                 TextEntry::make('brand_id')
                     ->numeric()

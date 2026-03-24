@@ -1,4 +1,5 @@
 @extends('layouts.parent');
+
 @section('title', 'Product Details')
 
 <!-- breadcrumb-section -->
