@@ -71,7 +71,8 @@
                                         href="{{ route('products') }}">Products</a></li>
                                 <li class="@if (request()->routeIs('categories')) current-list-item @endif"><a
                                         href="{{ route('categories') }}">Categories</a></li>
-                                <li><a href="#">Contact</a></li>
+                                <li class="@if (request()->routeIs('contact')) current-list-item @endif"><a
+                                    href="{{ route('contact') }}">Contact</a></li>
 
                                 <li>
                                     <div class="header-icons d-flex align-items-center">

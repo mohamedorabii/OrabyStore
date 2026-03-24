@@ -1148,6 +1148,15 @@ a.tof-btn:hover i {
   transition: 0.3s;
 }
 
+.contact-social .social-icons ul li a {
+  color: #051922;
+  opacity: 1;
+}
+
+.contact-social .social-icons ul li:hover a {
+  color: #F28123;
+}
+
 ul.social-link-team li a {
   -webkit-transition: 0.3s;
   -o-transition: 0.3s;

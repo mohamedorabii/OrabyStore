@@ -34,6 +34,7 @@ Route::get('/brands',[BrandController::class,'index'])->name('brands');
 Route::get('/categories/{id?}',[CategoryController::class,'index'])->name('categories');
 Route::get('/subcategories',[SubCategoryController::class,'index'])->name('subcategories');
 Route::get('/product/{id}',[ProductController::class,'productdetails'])->name('product.details');
+Route::view('/contact', 'contact')->name('contact');
 Route::prefix('cart')->name('cart.')->group(function(){
     Route::get('/',[CartController::class,'index'])->name('index');
       Route::post('/add',[CartController::class,'addToCart'])->name('add');
