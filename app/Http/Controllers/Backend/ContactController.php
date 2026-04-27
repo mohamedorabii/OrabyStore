@@ -20,7 +20,7 @@ class ContactController extends Controller
         Email: {$request->email}
         Message: {$request->message}
     ", function ($mail) use ($request) {
-        $mail->to('mosasameh123@gmail.com')
+        $mail->to('devmohamedalaaoraby@gmail.com')
              ->subject($request->subject);
     });
 

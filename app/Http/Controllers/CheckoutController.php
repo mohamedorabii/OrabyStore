@@ -3,111 +3,46 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PlaceOrderRequest;
-use App\Models\Cart;
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\ShippingSetting;
+use App\Services\CheckoutService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
+    public function __construct(protected CheckoutService $checkoutService) {}
+
     public function index()
     {
-         
-         $user = Auth::user();
-        $cartItems = Cart::where('user_id', $user->id)
-            ->whereHas('product', function ($query) {
-                $query->where('status', 1)
-                    ->whereHas('category', function ($categoryQuery) {
-                        $categoryQuery->where('status', 1);
-                    });
-            })
-            ->with('product')
-            ->get();
-      
+        $cartItems = $this->checkoutService->getActiveCartItems(Auth::id());
+
         if ($cartItems->isEmpty()) {
             return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
         }
-        $shipping = ShippingSetting::first()->price ?? 0;
-    $subtotal = $cartItems->sum(function($item){
-        return $item->quantity * $item->product->price;
-    });
-    $total = $subtotal + $shipping;
 
-        return view('checkout', compact('cartItems', 'shipping', 'subtotal', 'total'));
-    }
-  public function placeOrder(PlaceOrderRequest $request)
-   {
-    $user = Auth::user();
+        $totals = $this->checkoutService->calculateTotals($cartItems);
 
-    if ($user->is_admin) {
-        return redirect()->route('cart.index')->with('error', 'Admins are not allowed to place orders.');
+        return view('checkout', array_merge(compact('cartItems'), $totals));
     }
 
-    $cartItems = Cart::where('user_id', $user->id)
-        ->whereHas('product', function ($query) {
-            $query->where('status', 1)
-                ->whereHas('category', function ($categoryQuery) {
-                    $categoryQuery->where('status', 1);
-                });
-        })
-        ->with('product')
-        ->get();
-        $createdOrder = null;
+    public function placeOrder(PlaceOrderRequest $request)
+    {
+        $user      = Auth::user();
+        $cartItems = $this->checkoutService->getActiveCartItems($user->id);
 
-    if ($cartItems->isEmpty()) {
-        return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
-    }
-
-    $shipping = ShippingSetting::first()->price ?? 0;
-    $subtotal = $cartItems->sum(function($item){
-        return $item->quantity * $item->product->price;
-    });
-    $total = $subtotal + $shipping;
-
-    DB::transaction(function () use($cartItems, $user, $request, $subtotal, $shipping, $total, &$createdOrder) {
-        $order = Order::create([
-            'user_id' => $user->id,
-            'order_number' => 'ORD-' . strtoupper(uniqid()),
-            'status' => 'pending',
-            'shipping_price' => $shipping,
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'city' => $request->city,
-            'governorate' => $request->governorate,
-            'total_price' => $total
-        ]);
-        $createdOrder = $order;
-        foreach ($cartItems as $item) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $item->product_id,
-                'quantity' => $item->quantity,
-                'price' => $item->product->price,
-                'total_price' => $item->quantity * $item->product->price
-            ]);
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
         }
-        Cart::where('user_id', $user->id)->delete();
-    });
 
-    $trackingNumber = $createdOrder?->order_number ?? 'N/A';
+        $totals = $this->checkoutService->calculateTotals($cartItems);
+        $order  = $this->checkoutService->placeOrder($user, $request->validated(), $cartItems, $totals);
 
-    return redirect()
-        ->route('orders.index')
-        ->with('success', 'Order placed successfully. Tracking number: ' . $trackingNumber);
-   }
+        return redirect()
+            ->route('orders.index')
+            ->with('success', 'Order placed successfully. Tracking number: ' . $order->order_number);
+    }
 
-   public function myOrders()
-   {
-        $orders = Order::where('user_id', Auth::id())
-            ->with(['items.product'])
-            ->latest()
-            ->get();
-
+    public function myOrders()
+    {
+        $orders = $this->checkoutService->getUserOrders(Auth::id());
         return view('orders', compact('orders'));
-   }
-
+    }
 }
-        
