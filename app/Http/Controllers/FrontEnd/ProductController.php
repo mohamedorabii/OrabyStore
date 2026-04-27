@@ -3,48 +3,22 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Http\Controllers\Controller;
-use App\Models\Product;
+use App\Services\ProductService;
 
 class ProductController extends Controller
 {
+    public function __construct(protected ProductService $productService) {}
+
     public function index($id = null)
-    { 
-        // If category ID is provided, filter products by that category; otherwise, show all active products
-        if ($id) {
-            $products = Product::where('status', 1)
-                ->where('category_id', $id)
-                ->whereHas('category', function ($query) {
-                    $query->where('status', 1);
-                })->paginate(6);
-            return view('products', compact('products'));
-        } else {
-            $products = Product::where('status', 1)
-                ->whereHas('category', function ($query) {
-                    $query->where('status', 1);
-                })->paginate(6);
-            return view('products', compact('products'));
-        }
-        
+    {
+        $products = $this->productService->getActiveProducts($id);
+        return view('products', compact('products'));
     }
 
     public function productdetails($id)
     {
-        $product = Product::where('status', 1)
-            ->whereHas('category', function ($query) {
-                $query->where('status', 1);
-            })
-            ->findorfail($id);
-
-        $related_products = Product::where('status', 1)
-            ->where('category_id', $product->category_id)
-            ->where('id', '!=', $id)
-            ->whereHas('category', function ($query) {
-                $query->where('status', 1);
-            })
-            ->take(3)
-            ->get();
-        return view('product_details', compact('product','related_products'));
+        $product          = $this->productService->getProductDetails($id);
+        $related_products = $this->productService->getRelatedProducts($product->category_id, $id);
+        return view('product_details', compact('product', 'related_products'));
     }
-
-    
 }

@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 class CheckoutService
 {
-    // جيب كارت اليوزر مع الفلترة
     public function getActiveCartItems($userId)
     {
         return Cart::where('user_id', $userId)
@@ -24,7 +23,6 @@ class CheckoutService
             ->get();
     }
 
-    // احسب الأسعار
     public function calculateTotals($cartItems)
     {
         $shipping = ShippingSetting::first()->price ?? 0;
@@ -34,7 +32,6 @@ class CheckoutService
         return compact('subtotal', 'shipping', 'total');
     }
 
-    // عمل الأوردر
     public function placeOrder($user, $data, $cartItems, $totals)
     {
         $order = null;
@@ -69,7 +66,6 @@ class CheckoutService
         return $order;
     }
 
-    // اوردرات اليوزر
     public function getUserOrders($userId)
     {
         return Order::where('user_id', $userId)

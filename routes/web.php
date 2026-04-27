@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backend\ContactController;
-use App\Http\Controllers\BackEnd\SocialController;
+use App\Http\Controllers\Backend\SocialController;
 use App\Http\Controllers\Backend\VerificationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\FrontEnd\{ HomeController, ProductController, CategoryController, BrandController, CartController };

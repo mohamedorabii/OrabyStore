@@ -3,31 +3,21 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Http\Controllers\Controller;
-use App\Models\Brand;
-use App\Models\Product;
+use App\Services\BrandService;
 
 class BrandController extends Controller
 {
+    public function __construct(protected BrandService $brandService) {}
+
     public function index()
     {
-      
-            $brands = Brand::where('status', 1)->paginate(6);
-            return view('brands', compact('brands'));
-      
+        $brands = $this->brandService->getActiveBrands();
+        return view('brands', compact('brands'));
     }
 
     public function products($id)
     {
-        $products = Product::where('status', 1)
-            ->where('brand_id', $id)
-            ->whereHas('brand', function ($query) {
-                $query->where('status', 1);
-            })
-            ->whereHas('category', function ($query) {
-                $query->where('status', 1);
-            })
-            ->paginate(6);
-
+        $products = $this->brandService->getProductsByBrand($id);
         return view('products', compact('products'));
     }
 }

@@ -3,13 +3,15 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
+use App\Services\CategoryService;
 
 class CategoryController extends Controller
 {
+    public function __construct(protected CategoryService $categoryService) {}
+
     public function index($id = null)
     {
-        $categories = Category::where('status', 1)->paginate(6);
+        $categories = $this->categoryService->getActiveCategories();
         return view('categories', compact('categories'));
     }
 }

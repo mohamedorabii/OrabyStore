@@ -3,55 +3,35 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Models\Product;
+use App\Services\HomeService;
 
 class HomeController extends Controller
 {
+    public function __construct(protected HomeService $homeService) {}
+
     public function index()
     {
-        $categories = Category::where('status', 1)->get();
+        $categories = $this->homeService->getActiveCategories();
         return view('home', compact('categories'));
     }
+
     public function show($id)
     {
-        $category = Category::where('status', 1)->findorfail($id);
+        $category = $this->homeService->getCategory($id);
         return view('home', compact('category'));
     }
+
     public function LatestProducts()
     {
-        $categories = Category::where('status', 1)->get();
-        $products = Product::where('status', 1)
-            ->whereHas('category', function ($query) {
-                $query->where('status', 1);
-            })
-            ->latest()
-            ->take(6)
-            ->get();
+        $categories = $this->homeService->getActiveCategories();
+        $products   = $this->homeService->getLatestProducts();
         return view('home', compact('products', 'categories'));
     }
+
     public function showProductsByCategory($id = null)
     {
-        $categories = Category::where('status', 1)->get();
-        if ($id) {
-            $products = Product::where('status', 1)
-                ->where('category_id', $id)
-                ->whereHas('category', function ($query) {
-                    $query->where('status', 1);
-                })
-                ->latest()
-                ->take(6)
-                ->get();
-            return view('home', compact('products', 'categories'));
-        } else {
-            $products = Product::where('status', 1)
-                ->whereHas('category', function ($query) {
-                    $query->where('status', 1);
-                })
-                ->latest()
-                ->take(6)
-                ->get();
-            return view('home', compact('products', 'categories'));
-        }
+        $categories = $this->homeService->getActiveCategories();
+        $products   = $this->homeService->getProductsByCategory($id);
+        return view('home', compact('products', 'categories'));
     }
 }
