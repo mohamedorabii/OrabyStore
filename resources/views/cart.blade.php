@@ -100,7 +100,7 @@
                                         <input type="number" name="quantity" min="1" max="20"
                                                value="{{ $item->quantity }}"
                                                class="input-text qty"
-                                               style="width:60px;">
+                                               style="width:75px;">
                                     </div>
                                     <button type="submit" class="main_btn ml-2"
                                             style="padding:5px 12px; font-size:13px;">

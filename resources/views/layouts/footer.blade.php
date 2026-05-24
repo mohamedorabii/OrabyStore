@@ -40,7 +40,7 @@
             <div class="col-lg-4 col-md-12 footer-social">
                 <a href="https://www.facebook.com/share/1CfcigUQ94/" target="_blank"><i class="fa fa-facebook"></i></a>
                 <a href="https://www.linkedin.com/in/mohamedalaaorabii" target="_blank"><i class="fa fa-linkedin"></i></a>
-                <a href="https://github.com/mohamedorabiii" target="_blank"><i class="fa fa-github"></i></a>
+                <a href="https://github.com/mohamedorabii" target="_blank"><i class="fa fa-github"></i></a>
                 <a href="https://wa.me/201281856592" target="_blank"><i class="fa fa-whatsapp"></i></a>
             </div>
         </div>
