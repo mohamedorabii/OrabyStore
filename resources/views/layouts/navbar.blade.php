@@ -5,7 +5,7 @@
                 <div class="col-lg-7">
                     <div class="float-left">
                         <p>Phone: +201281856592</p>
-                        <p>email: mosasameh123@gmail.com</p>
+                        <p>email: devmohamedalaaoraby@gmail.com</p>
                     </div>
                 </div>
                 <div class="col-lg-5">

@@ -48,11 +48,11 @@
                 </div>
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="single-feature text-center">
-                        <a href="mailto:mosasameh123@gmail.com" class="title">
+                        <a href="mailto:devmohamedalaaoraby@gmail.com" class="title">
                             <i class="ti-email"></i>
                             <h3>Email</h3>
                         </a>
-                        <p><a href="mailto:mosasameh123@gmail.com">mosasameh123@gmail.com</a></p>
+                        <p><a href="mailto:devmohamedalaaoraby@gmail.com">devmohamedalaaoraby@gmail.com</a></p>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6 mb-4">

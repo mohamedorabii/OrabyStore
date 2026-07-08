@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\SubCategoryController;
+use App\Http\Controllers\Api\CartController;
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
@@ -39,3 +41,13 @@ Route::get('/brands/{id}/products', [BrandController::class, 'products']);
 
 Route::get('/subcategories',                [SubCategoryController::class, 'index']);
 Route::get('/subcategories/{id}/products',  [SubCategoryController::class, 'products']);
+
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/cart',           [CartController::class, 'index']);
+    Route::post('/cart',          [CartController::class, 'store']);
+    Route::put('/cart/{cart}',    [CartController::class, 'update']);
+    Route::delete('/cart/{cart}', [CartController::class, 'destroy']);
+    Route::delete('/cart',        [CartController::class, 'clear']);
+});
