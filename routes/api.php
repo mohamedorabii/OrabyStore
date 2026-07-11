@@ -1,14 +1,16 @@
 <?php
 
+use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\BrandController;
+use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CheckoutController;
+use App\Http\Controllers\Api\HomeController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\SearchController;
+use App\Http\Controllers\Api\SubCategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\Auth\AuthController;
-use App\Http\Controllers\Api\ProductController;
-use App\Http\Controllers\Api\HomeController;
-use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\Api\BrandController;
-use App\Http\Controllers\Api\SubCategoryController;
-use App\Http\Controllers\Api\CartController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -51,3 +53,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/cart/{cart}', [CartController::class, 'destroy']);
     Route::delete('/cart',        [CartController::class, 'clear']);
 });
+
+
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/checkout',       [CheckoutController::class, 'summary']);
+    Route::post('/checkout',      [CheckoutController::class, 'placeOrder']);
+    Route::get('/orders',         [CheckoutController::class, 'myOrders']);
+});
+
+Route::get('/search', [SearchController::class, 'index']);

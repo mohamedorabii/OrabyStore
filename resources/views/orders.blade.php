@@ -80,7 +80,7 @@
 
                             <p class="mb-2">
                                 <strong>Total:</strong>
-                                ${{ number_format($order->total_price, 2) }}
+                                ${{ number_format($order->total_price , 2) }}
                             </p>
 
                             <p class="mb-3">

@@ -39,7 +39,7 @@
             <div class="row">
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="single-feature text-center">
-                        <a href="#" class="title">
+                        <a class="title">
                             <i class="ti-home"></i>
                             <h3>Address</h3>
                         </a>
