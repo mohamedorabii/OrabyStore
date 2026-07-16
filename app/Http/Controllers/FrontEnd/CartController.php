@@ -45,19 +45,19 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Product added to cart successfully✅.');
     }
 
-    public function updateCart(UpdateCartRequest $request, Cart $cart)
-    {
-        $this->cartService->updateCart($cart, $request->quantity);
+public function updateCart(UpdateCartRequest $request, Cart $cart)
+{
+    $this->cartService->updateCart($cart, $request->quantity, Auth::id());
 
-        return redirect()->route('cart.index')->with('success', 'Cart updated successfully✅.');
-    }
+    return redirect()->route('cart.index')->with('success', 'Cart updated successfully✅.');
+}
 
-    public function removeFromCart(Cart $cart)
-    {
-        $this->cartService->removeFromCart($cart);
+public function removeFromCart(Cart $cart)
+{
+    $this->cartService->removeFromCart($cart, Auth::id());
 
-        return redirect()->route('cart.index')->with('success', 'Product removed from cart successfully✅.');
-    }
+    return redirect()->route('cart.index')->with('success', 'Product removed from cart successfully✅.');
+}
 
     public function clearCart()
     {
