@@ -6,7 +6,7 @@ use App\Http\Controllers\Backend\SearchController;
 use App\Http\Controllers\Backend\SocialController;
 use App\Http\Controllers\Backend\VerificationController;
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\FrontEnd\{ HomeController, ProductController, CategoryController, BrandController, CartController };
+use App\Http\Controllers\FrontEnd\{HomeController, ProductController, CategoryController, BrandController, CartController};
 use App\Http\Controllers\FrontEnd\SubCategoryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 | 🔐 Authentication Routes
 |--------------------------------------------------------------------------
 */
+
 Auth::routes(['verify' => true]);
 
 // Route::middleware('auth')->prefix('email')->name('verification.')->group(function () {
@@ -90,8 +91,9 @@ Route::middleware(['auth', 'verified', 'preventAdmin'])->group(function () {
         Route::get('/checkout', 'index')->name('checkout.index');
         Route::post('/checkout/place-order', 'placeOrder')->name('checkout.placeOrder');
         Route::get('/my-orders', 'myOrders')->name('orders.index');
+        Route::patch('/orders/{order}/cancel', 'cancelOrder')
+            ->name('orders.cancel');
     });
-
 });
 
 /*
@@ -109,6 +111,12 @@ Route::get('/search/live', [SearchController::class, 'live'])->name('search.live
 
 
 
-Route::post('/email/verify', [VerificationController::class, 'verify'])->name('verification.verify.otp');
+Route::post('/email/verify', [VerificationController::class, 'verify'])
+    ->middleware('throttle:5,1')
+    ->name('verification.verify.otp');
+
 Route::get('/password/reset/{token?}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+
+Route::post('/password/reset', [ResetPasswordController::class, 'reset'])
+    ->middleware('throttle:5,1')
+    ->name('password.update');

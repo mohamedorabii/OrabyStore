@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PlaceOrderRequest;
 use App\Http\Resources\OrderResource;
+use App\Models\Order;
 use App\Services\CheckoutService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,6 +57,23 @@ class CheckoutController extends Controller
 
         return response()->json([
             'orders' => OrderResource::collection($orders),
+        ]);
+    }
+
+    public function orderDetails($id)
+    {
+        $order = Order::where('user_id', Auth::id())
+            ->with(['items.product'])
+            ->find($id);
+
+        if (!$order) {
+            return response()->json([
+                'message' => 'Order not found.',
+            ], 404);
+        }
+
+        return response()->json([
+            'order' => new OrderResource($order),
         ]);
     }
 }

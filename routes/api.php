@@ -16,16 +16,18 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/verify-otp',  [AuthController::class, 'verifyOtp']);
-    Route::post('/resend-otp',  [AuthController::class, 'resendOtp']);
-    Route::post('/logout',      [AuthController::class, 'logout']);
+Route::middleware('throttle:5,1')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('/reset-password',  [AuthController::class, 'resetPassword']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/verify-otp',  [AuthController::class, 'verifyOtp']);
+        Route::post('/resend-otp',  [AuthController::class, 'resendOtp']);
+        Route::post('/logout',      [AuthController::class, 'logout']);
+    });
 });
+
 
 Route::get('/products',      [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
@@ -61,6 +63,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/checkout',       [CheckoutController::class, 'summary']);
     Route::post('/checkout',      [CheckoutController::class, 'placeOrder']);
     Route::get('/orders',         [CheckoutController::class, 'myOrders']);
+    Route::get('/orders/{id}', [CheckoutController::class, 'orderDetails']);
 });
 
 Route::get('/search', [SearchController::class, 'index']);

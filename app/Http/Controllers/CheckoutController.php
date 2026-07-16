@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PlaceOrderRequest;
+use App\Models\Order;
 use App\Services\CheckoutService;
 use Illuminate\Support\Facades\Auth;
 
@@ -45,4 +46,24 @@ class CheckoutController extends Controller
         $orders = $this->checkoutService->getUserOrders(Auth::id());
         return view('orders', compact('orders'));
     }
+
+    public function cancelOrder(Order $order)
+{
+    $cancelled = $this->checkoutService->cancelOrder(
+        $order,
+        auth()->id()
+    );
+
+    if (! $cancelled) {
+        return back()->with(
+            'error',
+            'You cannot cancel this order.'
+        );
+    }
+
+    return back()->with(
+        'success',
+        'Order cancelled successfully.'
+    );
+}
 }

@@ -48,13 +48,19 @@ class CartController extends Controller
 
     public function update(UpdateCartRequest $request, Cart $cart)
     {
-        $this->cartService->updateCart($cart, $request->quantity);
+        if (!$this->cartService->updateCart($cart, $request->quantity, auth()->id())) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+
         return response()->json(['message' => 'Cart updated successfully.']);
     }
 
     public function destroy(Cart $cart)
     {
-        $this->cartService->removeFromCart($cart);
+        if (!$this->cartService->removeFromCart($cart, auth()->id())) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+
         return response()->json(['message' => 'Product removed successfully.']);
     }
 

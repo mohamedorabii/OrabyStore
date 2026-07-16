@@ -8,7 +8,7 @@ use App\Models\ShippingSetting;
 
 class CartService
 {
-    // جيب الـ identifier (user أو session)
+
     public function getIdentifier($userId = null, $sessionId = null): array
     {
         return $userId
@@ -16,7 +16,7 @@ class CartService
             : ['session_id' => $sessionId];
     }
 
-    // جيب عناصر الكارت
+
     public function getCartItems(array $identifier)
     {
         return Cart::where($identifier)
@@ -30,7 +30,7 @@ class CartService
             ->get();
     }
 
-    // احسب الإجمالي
+
     public function calculateTotal($cartItems): array
     {
         $shipping = ShippingSetting::first()->price ?? 0;
@@ -39,7 +39,7 @@ class CartService
         return compact('total', 'shipping');
     }
 
-    // ضيف منتج للكارت
+
     public function addToCart(array $identifier, int $productId, int $quantity = 1): bool
     {
         $product = Product::where('status', 1)
@@ -67,19 +67,26 @@ class CartService
         return true;
     }
 
-    // عدّل الكمية
-    public function updateCart(Cart $cart, int $quantity): void
+    public function updateCart(Cart $cart, int $quantity, int $userId): bool
     {
+        if ($cart->user_id !== $userId) {
+            return false;
+        }
+
         $cart->update(['quantity' => $quantity]);
+        return true;
     }
 
-    // شيل منتج
-    public function removeFromCart(Cart $cart): void
+    public function removeFromCart(Cart $cart, int $userId): bool
     {
+        if ($cart->user_id !== $userId) {
+            return false;
+        }
+
         $cart->delete();
+        return true;
     }
 
-    // فضّي الكارت
     public function clearCart(array $identifier): void
     {
         Cart::where($identifier)->delete();

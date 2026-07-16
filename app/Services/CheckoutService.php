@@ -73,4 +73,35 @@ class CheckoutService
             ->latest()
             ->get();
     }
+
+    public function cancelOrder(Order $order, int $userId): bool
+{
+    if ($order->user_id !== $userId) {
+        return false;
+    }
+
+    if ($order->status !== 'pending') {
+        return false;
+    }
+
+    DB::transaction(function () use ($order) {
+
+        $order->loadMissing('items.product');
+
+        foreach ($order->items as $item) {
+
+            if ($item->product) {
+                $item->product->increment('quantity', $item->quantity);
+            }
+
+        }
+
+        $order->update([
+            'status' => 'cancelled'
+        ]);
+
+    });
+
+    return true;
+}
 }
