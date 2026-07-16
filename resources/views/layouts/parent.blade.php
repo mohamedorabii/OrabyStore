@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{{ asset('new-template/vendors/jquery-ui/jquery-ui.css') }}" />
     <link rel="stylesheet" href="{{ asset('new-template/css/style.css') }}" />
     <link rel="stylesheet" href="{{ asset('new-template/css/responsive.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}" />
+    <link rel="stylesheet" href="{{ asset('new-template/css/main.css') }}" />
 
     @stack('styles')
 </head>
@@ -44,7 +44,7 @@
     <script src="{{ asset('new-template/vendors/counter-up/jquery.counterup.js') }}"></script>
     <script src="{{ asset('new-template/js/mail-script.js') }}"></script>
     <script src="{{ asset('new-template/js/theme.js') }}"></script>
-    <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script src="{{ asset('new-template/js/main.js') }}"></script>
 
     @stack('scripts')
 </body>
