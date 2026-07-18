@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthService
@@ -13,20 +14,26 @@ class SocialAuthService
     {
         $socialUser = Socialite::driver($provider)->user();
 
-        $dbUser = User::updateOrCreate(
-            [
-                'provider_id' => $socialUser->getId(),
+        $user = User::where('email', $socialUser->getEmail())->first();
+
+        if ($user) {
+            $user->update([
+                'name'        => $socialUser->getName(),
                 'provider'    => $provider,
-            ],
-            [
-                'name'     => $socialUser->getName(),
-                'email'    => $socialUser->getEmail(),
-                'password' => Hash::make('my-' . $provider),
-            ]
-        );
+                'provider_id' => $socialUser->getId(),
+            ]);
+        } else {
+            $user = User::create([
+                'name'        => $socialUser->getName(),
+                'email'       => $socialUser->getEmail(),
+                'provider'    => $provider,
+                'provider_id' => $socialUser->getId(),
+                'password'    => Hash::make(Str::random(32)),
+            ]);
+        }
 
-        Auth::login($dbUser);
+        Auth::login($user);
 
-        return $dbUser;
+        return $user;
     }
 }
