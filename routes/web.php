@@ -85,7 +85,7 @@ Route::prefix('cart')->name('cart.')->controller(CartController::class)->group(f
 | 💳 Checkout & Orders
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'preventAdmin'])->group(function () {
 
     Route::controller(CheckoutController::class)->group(function () {
         Route::get('/checkout', 'index')->name('checkout.index');
