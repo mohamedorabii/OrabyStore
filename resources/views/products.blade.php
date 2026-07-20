@@ -33,43 +33,89 @@
                 </div>
             </div>
 
-            <div class="row">
-                @foreach ($products as $product)
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="single-product">
-                            <div class="product-img">
-                                <img class="related-product-img" src="{{ asset('storage/' . $product->image) }}"
-                                    alt="{{ $product->name_en }}" />
-                                <div class="p_icon">
-                                    <a href="{{ route('product.details', $product->id) }}" title="View">
-                                        <i class="ti-eye"></i>
-                                    </a>
+           <div class="row">
+    @foreach ($products as $product)
+        <div class="col-lg-4 col-md-6 mb-4">
 
-                                    <a href="#" class="cart-trigger" data-form="cart-form-{{ $product->id }}"
-                                        title="Add to cart">
-                                        <i class="ti-shopping-cart"></i>
-                                    </a>
+            <div class="single-product">
 
-                                    <form id="cart-form-{{ $product->id }}" action="{{ route('cart.add') }}"
-                                        method="POST" style="display:none;">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <input type="hidden" name="quantity" value="1">
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="product-btm">
-                                <a href="{{ route('product.details', $product->id) }}" class="d-block">
-                                    <h4>{{ $product->name_en }}</h4>
-                                </a>
-                                <div class="mt-3">
-                                    <span class="mr-4">${{ $product->price }}</span>
-                                </div>
-                            </div>
-                        </div>
+                <div class="product-img">
+
+                    <img class="related-product-img"
+                        src="{{ asset('storage/' . $product->image) }}"
+                        alt="{{ $product->name_en }}" />
+
+                    @if ($product->quantity > 0)
+                        <span class="badge badge-success"
+                            style="position:absolute;top:10px;left:10px;font-size:13px;padding:6px 12px;border-radius:20px;">
+                            In Stock
+                        </span>
+                    @else
+                        <span class="badge badge-danger"
+                            style="position:absolute;top:10px;left:10px;font-size:13px;padding:6px 12px;border-radius:20px;">
+                            Out of Stock
+                        </span>
+                    @endif
+
+                    <div class="p_icon">
+
+                        <a href="{{ route('product.details', $product->id) }}" title="View">
+                            <i class="ti-eye"></i>
+                        </a>
+
+                        @if ($product->quantity > 0)
+                            <a href="#"
+                                class="cart-trigger"
+                                data-form="cart-form-{{ $product->id }}"
+                                title="Add to cart">
+                                <i class="ti-shopping-cart"></i>
+                            </a>
+                        @endif
+
                     </div>
-                @endforeach
+
+                </div>
+
+                <div class="product-btm">
+
+                    <a href="{{ route('product.details', $product->id) }}" class="d-block">
+                        <h4>{{ $product->name_en }}</h4>
+                    </a>
+
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+
+                        <span class="mr-4 font-weight-bold">
+                            ${{ number_format($product->price, 2) }}
+                        </span>
+
+                        @if ($product->quantity > 0)
+                            <small class="text-success">
+                                {{ $product->quantity }} left
+                            </small>
+                        @else
+                            <small class="text-danger">
+                                Sold Out
+                            </small>
+                        @endif
+
+                    </div>
+
+                </div>
+
             </div>
+
+            <form id="cart-form-{{ $product->id }}"
+                action="{{ route('cart.add') }}"
+                method="POST"
+                style="display:none;">
+                @csrf
+                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                <input type="hidden" name="quantity" value="1">
+            </form>
+
+        </div>
+    @endforeach
+</div>
 
             {{-- Pagination --}}
             @if ($products->hasPages())
