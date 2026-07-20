@@ -24,8 +24,9 @@ class CheckoutController extends Controller
         return view('checkout', array_merge(compact('cartItems'), $totals));
     }
 
-    public function placeOrder(PlaceOrderRequest $request)
-    {
+   public function placeOrder(PlaceOrderRequest $request)
+{
+    try {
         $user      = Auth::user();
         $cartItems = $this->checkoutService->getActiveCartItems($user->id);
 
@@ -39,7 +40,11 @@ class CheckoutController extends Controller
         return redirect()
             ->route('orders.index')
             ->with('success', 'Order placed successfully. Tracking number: ' . $order->order_number);
+
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', $e->getMessage());
     }
+}
 
     public function myOrders()
     {

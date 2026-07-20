@@ -42,7 +42,7 @@ class ProductForm
                 TextInput::make('quantity')
                     ->required()
                     ->numeric()
-                    ->minValue(1),
+                    ->minValue(0),
                 Select::make('status')
                     ->label('Status')
                     ->required()

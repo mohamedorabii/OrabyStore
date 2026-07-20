@@ -97,7 +97,7 @@
                                       class="d-flex align-items-center">
                                     @csrf
                                     <div class="product_count">
-                                        <input type="number" name="quantity" min="1" max="20"
+                                        <input type="number" name="quantity" min="1" max="{{ $item->product->quantity }}"
                                                value="{{ $item->quantity }}"
                                                class="input-text qty"
                                                style="width:75px;">

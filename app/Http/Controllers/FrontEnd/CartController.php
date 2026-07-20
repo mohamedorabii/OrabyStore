@@ -30,26 +30,40 @@ class CartController extends Controller
         return view('cart', array_merge(compact('cartItems'), $totals));
     }
 
-    public function addToCart(AddToCartRequest $request)
-    {
-        $added = $this->cartService->addToCart(
-            $this->identifier(),
-            $request->product_id,
-            $request->quantity ?? 1
-        );
+   public function addToCart(AddToCartRequest $request)
+{
+    $added = $this->cartService->addToCart(
+        $this->identifier(),
+        $request->product_id,
+        $request->quantity ?? 1
+    );
 
-        if (!$added) {
-            return redirect()->back()->with('error', 'This product is not available right now.');
-        }
-
-        return redirect()->route('cart.index')->with('success', 'Product added to cart successfully✅.');
+    if (!$added) {
+        return redirect()->back()->withErrors([
+            'quantity' => 'The requested quantity exceeds the available stock.'
+        ]);
     }
+
+    return redirect()->route('cart.index')
+        ->with('success', 'Product added to cart successfully ✅');
+}
 
 public function updateCart(UpdateCartRequest $request, Cart $cart)
 {
-    $this->cartService->updateCart($cart, $request->quantity, Auth::id());
+    $updated = $this->cartService->updateCart(
+        $cart,
+        $request->quantity,
+        Auth::id()
+    );
 
-    return redirect()->route('cart.index')->with('success', 'Cart updated successfully✅.');
+    if (!$updated) {
+        return redirect()->back()->withErrors([
+            'quantity' => 'The requested quantity is not available.'
+        ]);
+    }
+
+    return redirect()->route('cart.index')
+        ->with('success', 'Cart updated successfully ✅');
 }
 
 public function removeFromCart(Cart $cart)
