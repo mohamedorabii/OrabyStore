@@ -19,11 +19,6 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes(['verify' => true]);
 
-// Route::middleware('auth')->prefix('email')->name('verification.')->group(function () {
-//     Route::get('/verify', [VerificationController::class, 'show'])->name('notice');
-//     Route::post('/verify/resend', [VerificationController::class, 'resend'])->name('resend');
-// });
-
 /*
 |--------------------------------------------------------------------------
 | 🌐 Social Login

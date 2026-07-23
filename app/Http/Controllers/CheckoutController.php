@@ -24,27 +24,26 @@ class CheckoutController extends Controller
         return view('checkout', array_merge(compact('cartItems'), $totals));
     }
 
-   public function placeOrder(PlaceOrderRequest $request)
-{
-    try {
-        $user      = Auth::user();
-        $cartItems = $this->checkoutService->getActiveCartItems($user->id);
+    public function placeOrder(PlaceOrderRequest $request)
+    {
+        try {
+            $user      = Auth::user();
+            $cartItems = $this->checkoutService->getActiveCartItems($user->id);
 
-        if ($cartItems->isEmpty()) {
-            return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
+            if ($cartItems->isEmpty()) {
+                return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
+            }
+
+            $totals = $this->checkoutService->calculateTotals($cartItems);
+            $order  = $this->checkoutService->placeOrder($user, $request->validated(), $cartItems, $totals);
+
+            return redirect()
+                ->route('orders.index')
+                ->with('success', 'Order placed successfully. Tracking number: ' . $order->order_number);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
-
-        $totals = $this->checkoutService->calculateTotals($cartItems);
-        $order  = $this->checkoutService->placeOrder($user, $request->validated(), $cartItems, $totals);
-
-        return redirect()
-            ->route('orders.index')
-            ->with('success', 'Order placed successfully. Tracking number: ' . $order->order_number);
-
-    } catch (\Exception $e) {
-        return redirect()->back()->with('error', $e->getMessage());
     }
-}
 
     public function myOrders()
     {
@@ -53,22 +52,19 @@ class CheckoutController extends Controller
     }
 
     public function cancelOrder(Order $order)
-{
-    $cancelled = $this->checkoutService->cancelOrder(
-        $order,
-        auth()->id()
-    );
+    {
+        $cancelled = $this->checkoutService->cancelOrder($order, auth()->id());
 
-    if (! $cancelled) {
+        if (! $cancelled) {
+            return back()->with(
+                'error',
+                'You cannot cancel this order.'
+            );
+        }
+
         return back()->with(
-            'error',
-            'You cannot cancel this order.'
+            'success',
+            'Order cancelled successfully.'
         );
     }
-
-    return back()->with(
-        'success',
-        'Order cancelled successfully.'
-    );
-}
 }

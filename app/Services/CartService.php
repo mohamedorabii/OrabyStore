@@ -82,39 +82,46 @@ class CartService
     return true;
 }
 
-    public function updateCart(Cart $cart, int $quantity, int $userId): bool
+   public function updateCart(Cart $cart, int $quantity, ?int $userId): bool
 {
+    // Guest cart
+    if ($userId === null) {
+        if ($quantity > $cart->product->quantity) {
+            return false;
+        }
+        $cart->update(['quantity' => $quantity]);
+        return true;
+    }
+
+    // User cart
     if ($cart->user_id !== $userId) {
         return false;
     }
 
-    $product = $cart->product;
-
-    if (!$product) {
+    if (!$cart->product || $quantity > $cart->product->quantity) {
         return false;
     }
 
-    if ($quantity > $product->quantity) {
-        return false;
-    }
-
-    $cart->update([
-        'quantity' => $quantity,
-    ]);
-
+    $cart->update(['quantity' => $quantity]);
     return true;
 }
 
-    public function removeFromCart(Cart $cart, int $userId): bool
-    {
-        if ($cart->user_id !== $userId) {
-            return false;
-        }
-
+public function removeFromCart(Cart $cart, ?int $userId): bool
+{
+    // Guest cart
+    if ($userId === null) {
         $cart->delete();
         return true;
     }
 
+    // User cart
+    if ($cart->user_id !== $userId) {
+        return false;
+    }
+
+    $cart->delete();
+    return true;
+}
     public function clearCart(array $identifier): void
     {
         Cart::where($identifier)->delete();
